@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<ul>
+    {% for i in tasks %}
+    <li><a href="{% url 'my_app:my_task' i.id%}">{{ i.title }}</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'my_app:add_task' %}">Добавить</a>
+</body>
+</html>
