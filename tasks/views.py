@@ -6,10 +6,6 @@ from tasks.forms import *
 from tasks.models import Task
 
 
-# def index(request):
-#    index = Task.objects.all()
-#    return render(request, 'tasks/index.html', {'index': index})
-
 def add_task(request):
     form = AddTaskForm()
     return render(request, 'tasks/add_task.html', {'form': form, 'title': 'Добавление статьи'})
@@ -29,11 +25,6 @@ class ShowTask(DetailView):
     model = Task
     template_name = 'tasks/task.html'
     pk_url_kwarg = 'id'
-
-
-# def my_task(request, id):
-#    task = Task.objects.get(pk=id)
-#    return render(request, 'tasks/task.html', {'task': task})
 
 
 def pageNotFound(request, exeption):

@@ -8,7 +8,7 @@
 {% block content %}
 <form action="{% url 'my_app:add_task' %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form }}
     <button type="submit">Добавить</button>
 </form>
 {% endblock %}
