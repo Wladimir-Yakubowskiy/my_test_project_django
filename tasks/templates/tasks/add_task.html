@@ -6,7 +6,7 @@
 </head>
 <body>
 {% block content %}
-<form action="{% url 'my_app:add_task' %}" method="post">
+<form action="{% url 'my_app:save_task' %}" method="post">
     {% csrf_token %}
     {{ form }}
     <button type="submit">Добавить</button>

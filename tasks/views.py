@@ -1,5 +1,6 @@
-from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseServerError, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
 
 from tasks.forms import *
@@ -10,6 +11,22 @@ def add_task(request):
     form = AddTaskForm()
     return render(request, 'tasks/add_task.html', {'form': form, 'title': 'Добавление статьи'})
 
+# Класс для обработки входящего запроса
+class SaveTask(View):
+    def post(self, request, *args, **kwargs):
+        # Заранее предупреждаем, какая именно форма придет
+        form = AddTaskForm(request.POST or None)
+        # Если все данные в форме валидны, то...
+        if form.is_valid():
+            # Создаем экземпляр объекта по нашей форме
+            new_task = form.save(commit=False)
+            # Заполняем поля объекта
+            new_task.title = form.cleaned_data['title']
+            new_task.description = form.cleaned_data['description']
+            # Сохраняем объект после изменений
+            new_task.save()
+            # Возвращаем на страницу, с которой была отправлена форма
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class TasksIndex(ListView):
     model = Task

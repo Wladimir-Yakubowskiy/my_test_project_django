@@ -2,7 +2,12 @@ from django import forms
 from .models import *
 
 
-class AddTaskForm(forms.Form):
-    title = models.CharField(max_length=100)
-    description = models.TextField(max_length=1000)
-    is_published = models.BooleanField()
+class AddTaskForm(forms.ModelForm):
+
+    class Meta:
+        # Указываем, в какую модель из models.py будем все это сохранять
+        model = Task
+        # тут список полей, которые нужно вывести. Поля соответствуют полям модели из models.py
+        fields = (
+            'title', 'description', 'is_published'
+        )
