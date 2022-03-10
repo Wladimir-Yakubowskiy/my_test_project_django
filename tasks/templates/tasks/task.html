@@ -11,5 +11,6 @@
     <li>{{ task.time_create }}</li>
     <li>{{ task.is_published }}</li>
 </ul>
+<a href="{% url  'my_app:delete' task.id %}"> Удалить </a>
 </body>
 </html>

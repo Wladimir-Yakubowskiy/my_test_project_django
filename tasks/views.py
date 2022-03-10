@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseServerError, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
 
@@ -10,6 +11,12 @@ from tasks.models import Task
 def add_task(request):
     form = AddTaskForm()
     return render(request, 'tasks/add_task.html', {'form': form, 'title': 'Добавление статьи'})
+
+def delete(request, task_id):
+    task = Task.objects.get(id=task_id)
+    task.delete()
+    return HttpResponseRedirect(reverse('my_app:index'))
+
 
 # Класс для обработки входящего запроса
 class SaveTask(View):
