@@ -1,6 +1,7 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseServerError, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
 
@@ -12,10 +13,17 @@ def add_task(request):
     form = AddTaskForm()
     return render(request, 'tasks/add_task.html', {'form': form, 'title': 'Добавление статьи'})
 
+
 def delete(request, task_id):
     task = Task.objects.get(id=task_id)
     task.delete()
     return HttpResponseRedirect(reverse('my_app:index'))
+
+
+class RegisterUser(CreateView):
+    form_class = RegisterUserForm
+    template_name = 'tasks/register.html'
+    success_url = reverse_lazy('my_app:index')
 
 
 # Класс для обработки входящего запроса
@@ -33,7 +41,8 @@ class SaveTask(View):
             # Сохраняем объект после изменений
             new_task.save()
             # Возвращаем на страницу, с которой была отправлена форма
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect(reverse('my_app:index'))
+
 
 class TasksIndex(ListView):
     model = Task
