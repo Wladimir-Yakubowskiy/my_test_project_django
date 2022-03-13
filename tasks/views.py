@@ -1,3 +1,4 @@
+from django.contrib.auth import logout, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseServerError, HttpResponseRedirect
@@ -26,14 +27,21 @@ class RegisterUser(CreateView):
     template_name = 'tasks/register.html'
     success_url = reverse_lazy('my_app:index')
 
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request.user)
+        return redirect('my_app:index')
 
 class LoginUser(LoginView):
-    form_class = AuthenticationForm
+    form_class = LoginUserForm
     template_name = 'tasks/authentication.html'
 
     def get_success_url(self):
         return reverse_lazy('my_app:index')
 
+def logout_user(request):
+    logout(request)
+    return redirect('my_app:login')
 
 # Класс для обработки входящего запроса
 class SaveTask(View):

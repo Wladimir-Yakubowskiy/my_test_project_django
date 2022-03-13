@@ -5,11 +5,13 @@
     <title>{{ title }}</title>
 </head>
 <body>
+<h1>Текущие задачи:</h1>
 <ul>
     {% for i in tasks %}
     <li><a href="{% url 'my_app:my_task' i.id%}">{{ i.title }}</a></li>
     {% endfor %}
 </ul>
 <a href="{% url 'my_app:add_task' %}">Добавить</a>
+<a href="{% url 'my_app:logout' %}">Выйти из учётной записи</a>
 </body>
 </html>
