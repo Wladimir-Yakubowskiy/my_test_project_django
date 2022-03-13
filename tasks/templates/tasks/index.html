@@ -11,7 +11,13 @@
     <li><a href="{% url 'my_app:my_task' i.id%}">{{ i.title }}</a></li>
     {% endfor %}
 </ul>
-<a href="{% url 'my_app:add_task' %}">Добавить</a>
-<a href="{% url 'my_app:logout' %}">Выйти из учётной записи</a>
+{% if request.user.is_authenticated %}
+<div>Вы вошли как {{ request.user.username }}</div>
+<div><a href="{% url 'my_app:add_task' %}">Добавить</a></div>
+<div><a href="{% url 'my_app:logout' %}">Выйти из учётной записи</a></div>
+{% else %}
+<div><a href="{% url 'my_app:login' %}">Авторизация</a></div>
+<div><a href="{% url 'my_app:register' %}">Регистрация</a></div>
+{% endif %}
 </body>
 </html>
