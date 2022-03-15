@@ -11,6 +11,7 @@
     {{ form.as_p }}
     <button type="submit">Регистрация</button>
 </form>
+<div><a href="{% url 'my_app:login' %}">Уже зарегистрированы? Авторизируйтесь</a></div>
 {% endblock %}
 </body>
 </html>

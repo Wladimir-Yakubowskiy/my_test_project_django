@@ -11,6 +11,7 @@
     {{ form.as_p }}
     <button type="submit">Авторизация</button>
 </form>
+<div><a href="{% url 'my_app:register' %}">Нет учётной записи? Зарегистрируйтесь!</a></div>
 {% endblock %}
 </body>
 </html>

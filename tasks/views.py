@@ -1,16 +1,19 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseServerError, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
 
 from tasks.forms import *
 from tasks.models import Task
 
-
+@login_required
 def add_task(request):
     form = AddTaskForm()
     return render(request, 'tasks/add_task.html', {'form': form, 'title': 'Добавление статьи'})
@@ -27,10 +30,12 @@ class RegisterUser(CreateView):
     template_name = 'tasks/register.html'
     success_url = reverse_lazy('my_app:index')
 
+    # Вызывается при успешно заполненной форме
     def form_valid(self, form):
         user = form.save()
         login(self.request.user)
         return redirect('my_app:index')
+
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
@@ -39,9 +44,11 @@ class LoginUser(LoginView):
     def get_success_url(self):
         return reverse_lazy('my_app:index')
 
+
 def logout_user(request):
     logout(request)
     return redirect('my_app:login')
+
 
 # Класс для обработки входящего запроса
 class SaveTask(View):
@@ -60,7 +67,7 @@ class SaveTask(View):
             # Возвращаем на страницу, с которой была отправлена форма
         return HttpResponseRedirect(reverse('my_app:index'))
 
-
+@method_decorator(login_required, name='dispatch')
 class TasksIndex(ListView):
     model = Task
     template_name = 'tasks/index.html'
@@ -70,7 +77,7 @@ class TasksIndex(ListView):
     def get_queryset(self):
         return Task.objects.filter(is_published=True)
 
-
+@method_decorator(login_required, name='dispatch')
 class ShowTask(DetailView):
     model = Task
     template_name = 'tasks/task.html'
